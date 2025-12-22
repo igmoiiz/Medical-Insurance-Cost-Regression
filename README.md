@@ -123,15 +123,65 @@ In most cases:
 
 ---
 
+## API Implementation
+
+This project includes a FastAPI-based web server to serve the model predictions.
+
+### Running the Server
+The best practice for running the API is using the **Uvicorn** CLI from the project root:
+
+```bash
+uvicorn app.main:app --reload
+```
+- **`app.main:app`**: Points to the `app` instance in `app/main.py`.
+- **`--reload`**: Enables auto-restart on code changes.
+
+### API Endpoints
+- **`GET /`**: Health check and welcome message.
+- **`POST /predict`**: Accepts user attributes and returns a prediction.
+
+#### Sample Request Body (JSON)
+```json
+{
+    "age": 34,
+    "sex": "female",
+    "bmi": 23.5,
+    "children": 2,
+    "smoker": "no",
+    "region": "northwest"
+}
+```
+
+---
+
+## Understanding the Results
+
+When you call the `/predict` endpoint, the API returns two main values:
+
+### 1. `prediction_scaled`
+*   **What is it?**: This is the raw output from the machine learning model.
+*   **Why is it scaled?**: During training, we scale the target variable (insurance charges) to help the model learn more efficiently. This value is in the "scaled space" (typically Z-score normalized where 0 is average).
+*   **Units**: Unitless (normalized value).
+
+### 2. `insurance_cost`
+*   **What is it?**: This is the final prediction converted back into real-world units.
+*   **Units**: **US Dollars ($)**.
+*   **Meaning**: This is the estimated **annual** medical insurance cost for the individual based on their profile.
+
+---
+
 ## Files in Repository
 - `insurance.csv` → Dataset  
-- `medical_insurance_cost.py` → Main analysis script  
-- `README.md` → Documentation (this file)  
+- `main.py` → Script for data analysis and model training workflow.
+- `app/main.py` → FastAPI application for serving predictions.
+- `models/` → Saved `.pkl` files for the trained model and scalers.
+- `postman.json` → Postman collection for testing the API.
+- `README.md` → Documentation (this file)
 
 ---
 
 ## Conclusion
 This project demonstrates how personal attributes (age, BMI, smoking status, etc.) influence medical insurance costs.  
-Ensemble methods like **Random Forest** and **Gradient Boosting** consistently deliver better predictive performance.  
+Ensemble methods like **Random Forest** and **Gradient Boosting** consistently deliver better predictive performance, while the FastAPI implementation provides an easy way to consume these predictions in external applications.
 
 ---

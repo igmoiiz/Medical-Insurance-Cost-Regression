@@ -39,14 +39,7 @@ def predict(input_data: InsuranceInput):
         data_dict = input_data.dict()
         df = pd.DataFrame([data_dict])
         
-        # Preprocessing: One-hot encoding (must match training)
-        # We need to handle the categorical columns exactly as pd.get_dummies(..., drop_first=True) did
-        
-        # Categorical columns in training: sex, smoker, region
-        # Expected columns after get_dummies(drop_first=True):
-        # age, bmi, children, sex_male, smoker_yes, region_northwest, region_southeast, region_southwest
-        
-        # Manually perform encoding to ensure stability
+        # Performing encoding to ensure stability
         processed_df = pd.DataFrame({
             'age': [df['age'][0]],
             'bmi': [df['bmi'][0]],
@@ -65,7 +58,7 @@ def predict(input_data: InsuranceInput):
         prediction_scaled = model.predict(X_scaled)
         
         # De-scale prediction
-        # model.predict returns 1D array, reshape for inverse_transform
+        # model.predict returns a 1D array so reshaping the array for inverse_transform
         prediction = scaler_y.inverse_transform(prediction_scaled.reshape(-1, 1))
         
         return {

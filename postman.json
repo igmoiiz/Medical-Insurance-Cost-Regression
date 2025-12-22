@@ -1,0 +1,101 @@
+{
+	"info": {
+		"_postman_id": "8c597bf0d-6555-41f2-89b7-dd8448a14891",
+		"name": "Medical Insurance Cost Prediction API",
+		"description": "API collection for predicting medical insurance costs based on user attributes.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check / Root",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Returns a welcome message to verify the API is running."
+			},
+			"response": []
+		},
+		{
+			"name": "Predict Insurance Cost",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"age\": 34,\n    \"sex\": \"female\",\n    \"bmi\": 23.5,\n    \"children\": 2,\n    \"smoker\": \"no\",\n    \"region\": \"northwest\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/predict",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"predict"
+					]
+				},
+				"description": "Predicts medical insurance cost based on age, sex, BMI, children, smoker status, and region."
+			},
+			"response": []
+		},
+		{
+			"name": "Predict Insurance Cost (Smoker)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"age\": 19,\n    \"sex\": \"male\",\n    \"bmi\": 27.9,\n    \"children\": 0,\n    \"smoker\": \"yes\",\n    \"region\": \"southwest\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/predict",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"predict"
+					]
+				},
+				"description": "Predicts medical insurance cost for a smoker."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}

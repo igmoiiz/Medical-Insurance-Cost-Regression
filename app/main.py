@@ -8,9 +8,10 @@ import os
 app = FastAPI(title="Medical Insurance Cost Predictor")
 
 # Paths
-MODEL_PATH = "models/best_model_Linear_Regression.pkl"
-SCALER_X_PATH = "models/scaler_X.pkl"
-SCALER_Y_PATH = "models/scaler_y.pkl"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_PATH = os.path.join(BASE_DIR, "models", "best_model_Linear_Regression.pkl")
+SCALER_X_PATH = os.path.join(BASE_DIR, "models", "scaler_X.pkl")
+SCALER_Y_PATH = os.path.join(BASE_DIR, "models", "scaler_y.pkl")
 
 # Load model and scalers
 if not all(os.path.exists(p) for p in [MODEL_PATH, SCALER_X_PATH, SCALER_Y_PATH]):

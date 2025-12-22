@@ -59,9 +59,9 @@ def print_model_rankings(results, metric="R2", ascending=False):
     for i, (name, metrics) in enumerate(sorted_models, 1):
         print(f"{i}. {name}: {metrics[metric]:.4f}")
 
-def save_best_model(models, results, output_dir='models', metric="R2"):
+def save_best_model(models, results, scaler_X, scaler_y, output_dir='models', metric="R2"):
     """
-    Identifies the best model based on R2 score and saves it.
+    Identifies the best model based on R2 score and saves it, along with the scalers.
     """
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -75,9 +75,14 @@ def save_best_model(models, results, output_dir='models', metric="R2"):
     print(f"\nBest Model: {best_model_name} with {metric} = {best_score:.4f}")
     
     # Save model
-    filename = f"best_model_{best_model_name.replace(' ', '_')}.pkl"
-    filepath = os.path.join(output_dir, filename)
-    joblib.dump(best_model, filepath)
-    print(f"Saved best model to: {filepath}")
+    model_filename = f"best_model_{best_model_name.replace(' ', '_')}.pkl"
+    model_filepath = os.path.join(output_dir, model_filename)
+    joblib.dump(best_model, model_filepath)
+    print(f"Saved best model to: {model_filepath}")
+
+    # Save scalers
+    joblib.dump(scaler_X, os.path.join(output_dir, 'scaler_X.pkl'))
+    joblib.dump(scaler_y, os.path.join(output_dir, 'scaler_y.pkl'))
+    print(f"Saved scalers to: {output_dir}")
     
     return best_model_name

@@ -28,14 +28,15 @@ def preprocess_data(df, target_column='charges', test_size=0.2, random_state=42)
     1. One-hot encoding for categorical variables.
     2. Splitting into Train/Test sets.
     3. Scaling features (StandardScaler).
+    4. Scaling target (StandardScaler).
     
     Returns:
-        X_train_scaled, X_test_scaled, y_train, y_test, scaler
+        X_train_scaled, X_test_scaled, y_train_scaled, y_test_scaled, scaler_X, scaler_y
     """
     
     # Separate features and target
     X = df.drop(target_column, axis=1)
-    y = df[target_column]
+    y = df[target_column].values.reshape(-1, 1) # Reshape for scaler
     
     # One-hot encoding for categorical variables
     X = pd.get_dummies(X, drop_first=True)
@@ -47,8 +48,13 @@ def preprocess_data(df, target_column='charges', test_size=0.2, random_state=42)
     
     # Scale features
     # Important: Fit scaler ONLY on training data to avoid data leakage
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    scaler_X = StandardScaler()
+    X_train_scaled = scaler_X.fit_transform(X_train)
+    X_test_scaled = scaler_X.transform(X_test)
+
+    # Scale target
+    scaler_y = StandardScaler()
+    y_train_scaled = scaler_y.fit_transform(y_train)
+    y_test_scaled = scaler_y.transform(y_test)
     
-    return X_train_scaled, X_test_scaled, y_train, y_test, scaler
+    return X_train_scaled, X_test_scaled, y_train_scaled.ravel(), y_test_scaled.ravel(), scaler_X, scaler_y

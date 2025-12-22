@@ -36,7 +36,7 @@ def main():
     print("\nPreprocessing Data...")
     df_clean = data.clean_data(df)
     
-    X_train, X_test, y_train, y_test, scaler = data.preprocess_data(df_clean)
+    X_train, X_test, y_train, y_test, scaler_X, scaler_y = data.preprocess_data(df_clean)
     print(f"Training shapes: X={X_train.shape}, y={y_train.shape}")
     print(f"Testing shapes:  X={X_test.shape}, y={y_test.shape}")
     
@@ -66,7 +66,7 @@ def main():
         
     # 7. Save Best Model
     print("\nSaving Best Model...")
-    modeling.save_best_model(trained_models, results, metric="R2")
+    modeling.save_best_model(trained_models, results, scaler_X, scaler_y, metric="R2")
     
     print("\nAnalysis Complete!")
 

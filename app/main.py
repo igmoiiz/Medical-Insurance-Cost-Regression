@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import joblib
-import pandas as pd
 import numpy as np
 import os
 
@@ -36,24 +35,23 @@ def read_root():
 @app.post("/predict")
 def predict(input_data: InsuranceInput):
     try:
-        # Convert input to DataFrame
-        data_dict = input_data.dict()
-        df = pd.DataFrame([data_dict])
+        # Manually perform encoding to ensure stability without pandas
+        # Expected features: age, bmi, children, sex_male, smoker_yes, region_northwest, region_southeast, region_southwest
+        features = [
+            input_data.age,
+            input_data.bmi,
+            input_data.children,
+            1 if input_data.sex == 'male' else 0,
+            1 if input_data.smoker == 'yes' else 0,
+            1 if input_data.region == 'northwest' else 0,
+            1 if input_data.region == 'southeast' else 0,
+            1 if input_data.region == 'southwest' else 0
+        ]
         
-        # Performing encoding to ensure stability
-        processed_df = pd.DataFrame({
-            'age': [df['age'][0]],
-            'bmi': [df['bmi'][0]],
-            'children': [df['children'][0]],
-            'sex_male': [1 if df['sex'][0] == 'male' else 0],
-            'smoker_yes': [1 if df['smoker'][0] == 'yes' else 0],
-            'region_northwest': [1 if df['region'][0] == 'northwest' else 0],
-            'region_southeast': [1 if df['region'][0] == 'southeast' else 0],
-            'region_southwest': [1 if df['region'][0] == 'southwest' else 0]
-        })
+        X = np.array([features])
         
         # Scale features
-        X_scaled = scaler_X.transform(processed_df)
+        X_scaled = scaler_X.transform(X)
         
         # Predict
         prediction_scaled = model.predict(X_scaled)

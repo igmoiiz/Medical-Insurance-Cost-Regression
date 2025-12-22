@@ -1,0 +1,38 @@
+# Vercel Ignore File
+# This file prevents unnecessary files from being uploaded to Vercel,
+# helping to stay within the 250MB size limit.
+
+# Directories
+venv/
+.git/
+plots/
+insurance_analysis/
+generator/
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+postman/
+
+# Files
+insurance.csv
+main.py
+verify_scaling.py
+app.py
+*.pkl
+# Wait, we NEED the models/best_model_Linear_Regression.pkl and scalers.
+# So let's be selective.
+
+# Ignore all pickle files by default
+*.pkl
+
+# But allow the ones in the models directory
+!models/*.pkl
+
+# Ignore others
+LICENSE.txt
+*.md
+!README.md
+*.png
+*.jpg
+*.jpeg
+*.gif

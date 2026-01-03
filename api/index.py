@@ -14,7 +14,6 @@ SCALER_Y_PATH = os.path.join(BASE_DIR, "models", "scaler_y.pkl")
 
 # Load model and scalers
 if not all(os.path.exists(p) for p in [MODEL_PATH, SCALER_X_PATH, SCALER_Y_PATH]):
-    # In Vercel, paths might be slightly different. Let's try root-relative as fallback
     MODEL_PATH = "models/best_model_Linear_Regression.pkl"
     SCALER_X_PATH = "models/scaler_X.pkl"
     SCALER_Y_PATH = "models/scaler_y.pkl"
@@ -45,7 +44,7 @@ def health():
 @app.post("/predict")
 def predict(input_data: InsuranceInput):
     try:
-        # Manually perform encoding to ensure stability without pandas
+        # Manually performing encoding to ensure stability without pandas
         # Expected features: age, bmi, children, sex_male, smoker_yes, region_northwest, region_southeast, region_southwest
         features = [
             input_data.age,

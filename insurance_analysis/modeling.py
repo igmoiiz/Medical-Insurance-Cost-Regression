@@ -7,10 +7,6 @@ from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 def train_models(X_train, y_train):
-    """
-    Trains multiple regression models.
-    Returns a dictionary of trained models.
-    """
     models = {
         "Linear Regression": LinearRegression(),
         "Decision Tree": DecisionTreeRegressor(random_state=42),
@@ -27,10 +23,6 @@ def train_models(X_train, y_train):
     return trained_models
 
 def evaluate_models(models, X_test, y_test):
-    """
-    Evaluates trained models on test data.
-    Returns a DataFrame-like structure (or dict) of results.
-    """
     results = {}
     
     for name, model in models.items():
@@ -46,13 +38,12 @@ def evaluate_models(models, X_test, y_test):
             "RMSE": rmse,
             "MAE": mae,
             "R2": r2,
-            "Predictions": y_pred # Keep for plotting
+            "Predictions": y_pred
         }
         
     return results
 
 def print_model_rankings(results, metric="R2", ascending=False):
-    """Prints models ranked by a specific metric."""
     print(f"\nModel Ranking by {metric} ({'Ascending' if ascending else 'Descending'}):")
     sorted_models = sorted(results.items(), key=lambda x: x[1][metric], reverse=not ascending)
     
@@ -60,14 +51,10 @@ def print_model_rankings(results, metric="R2", ascending=False):
         print(f"{i}. {name}: {metrics[metric]:.4f}")
 
 def save_best_model(models, results, scaler_X, scaler_y, output_dir='models', metric="R2"):
-    """
-    Identifies the best model based on R2 score and saves it, along with the scalers.
-    """
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
         
     # Find best model name
-    # We assume higher R2 is better. If using MSE/RMSE, output should be reversed.
     best_model_name = max(results, key=lambda x: results[x][metric])
     best_model = models[best_model_name]
     best_score = results[best_model_name][metric]
